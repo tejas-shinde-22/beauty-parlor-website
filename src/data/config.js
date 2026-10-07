@@ -7,21 +7,22 @@ export const uimg = (id, w = 1200) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 export const salon = {
-  name: "Unique Beauty Parlour",
+  name: "UNIQUE BEAUTY PARLOUR",
   shortName: "Unique",
   tagline: "Where Beauty Meets Confidence",
   established: 2019,
-  phone: "+91 98220 12345",
-  phoneHref: "tel:+919822012345",
-  whatsapp: "919822012345",
-  whatsappMessage: "Hi Unique Beauty Parlour! I'd like to book an appointment.",
+  phone: "97697 03622",
+  phoneHref: "tel:+919769703622",
+  whatsapp: "919769703622",
+  whatsappMessage: "Hi UNIQUE BEAUTY PARLOUR! I'd like to book an appointment.",
   email: "hello@uniquebeauty.in",
-  address: "2nd Floor, Pearl Plaza, FC Road, Pune, Maharashtra 411005",
-  mapQuery: "FC Road, Pune, Maharashtra",
-  instagram: "@uniquebeautyparlour",
+  address: "Yeshpream CHS\nShop-07, Plot-17, Sector-07\nKamothe 410209",
+  addressLines: ["Yeshpream CHS", "Shop-07, Plot-17, Sector-07", "Kamothe 410209"],
+  mapQuery: "Yeshpream CHS, Shop-07, Plot-17, Sector-07, Kamothe 410209",
+  instagram: "@uniquesaloon2",
   hours: [
-    { days: "Monday – Saturday", time: "10:00 AM – 8:30 PM" },
-    { days: "Sunday", time: "10:00 AM – 6:00 PM" },
+    { days: "Monday – Saturday", time: "11:00 AM – 9:00 PM" },
+    { days: "Sunday", time: "11:00 AM – 9:00 PM" },
   ],
 };
 
@@ -35,7 +36,7 @@ export const navLinks = [
 
 export const images = {
   hero: uimg("1610173827043-9db50e0d8ef9", 1800),
-  heroAlt: "Bride in a red and gold ensemble with intricate jewellery, styled at Unique Beauty Parlour",
+  heroAlt: "Bride in a red and gold ensemble with intricate jewellery, styled at UNIQUE BEAUTY PARLOUR",
   interiors: [
     uimg("1637777277435-3c44f82fd0c9"),
     uimg("1781450090585-1a511b7066d9"),
@@ -87,7 +88,6 @@ export const serviceCategories = [
     blurb: "Precision cuts, couture colour and restorative rituals for hair that turns heads.",
     items: [
       { name: "Hair Cut & Styling", desc: "A bespoke cut and finish, tailored to your face shape and lifestyle.", price: 399, img: images.hair.cut },
-      { name: "Hair Spa", desc: "Deep-nourishment ritual that restores softness, shine and scalp health.", price: 799, img: images.hair.spa },
       { name: "Hair Coloring", desc: "Global colour, balayage and fashion shades with premium ammonia-free ranges.", price: 1499, img: images.hair.color },
       { name: "Keratin Treatment", desc: "Frizz-erasing keratin therapy for silk-smooth hair that lasts for months.", price: 2499, img: images.hair.keratin },
       { name: "Hair Smoothening", desc: "Glass-like straightness and mirror shine with a gentle smoothening system.", price: 2999, img: images.hair.smoothening },

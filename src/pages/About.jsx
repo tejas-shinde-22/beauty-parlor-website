@@ -4,13 +4,21 @@ import SectionHeading from "@/components/shared/SectionHeading";
 import Reveal from "@/components/shared/Reveal";
 import CtaSection from "@/components/shared/CtaSection";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { salon, images, stats, team, testimonials, whyChooseUs } from "@/data/config";
+import { salon, images, stats, serviceCategories, testimonials, whyChooseUs } from "@/data/config";
 import { HeartHandshake, Eye, Quote } from "lucide-react";
+
+// Non-staff imagery for the "About the Parlour" section
+const parlourImages = {
+  hair: images.hair.spa,
+  skin: images.skin.glow,
+  beauty: images.beauty.makeup,
+  bridal: images.bridal.one,
+};
 
 const About = () => {
   usePageMeta(
     "Our Story",
-    "Meet the artists behind Unique Beauty Parlour — five years of craft, care and five hundred glowing clients."
+    `Discover ${salon.name} — five years of craft, care and five hundred glowing clients.`
   );
 
   return (
@@ -27,7 +35,7 @@ const About = () => {
         <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 sm:px-10 lg:grid-cols-2 lg:py-32">
           <div className="relative">
             <div className="overflow-hidden rounded-3xl shadow-luxe-lg">
-              <img src={images.interiors[3]} alt="The Unique Beauty Parlour studio" loading="lazy" className="aspect-[4/5] w-full object-cover" />
+              <img src={images.interiors[3]} alt={`The ${salon.name} studio`} loading="lazy" className="aspect-[4/5] w-full object-cover" />
             </div>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -36,7 +44,7 @@ const About = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="absolute -bottom-10 -right-4 w-1/2 overflow-hidden rounded-3xl border-8 border-cream shadow-luxe-lg sm:-right-10"
             >
-              <img src={images.bridal.two} alt="A bride styled at Unique Beauty Parlour" loading="lazy" className="aspect-square w-full object-cover" />
+              <img src={images.bridal.two} alt={`A bride styled at ${salon.name}`} loading="lazy" className="aspect-square w-full object-cover" />
             </motion.div>
           </div>
           <div className="flex flex-col items-start gap-6 pt-8 lg:pt-0">
@@ -87,29 +95,30 @@ const About = () => {
         </div>
       </section>
 
-      <section className="bg-cream" data-testid="about-team">
+      <section className="bg-cream" data-testid="about-parlour">
         <div className="mx-auto max-w-7xl px-6 py-24 sm:px-10 lg:py-32">
           <SectionHeading
-            overline="The Artists"
-            title="Meet the hands behind"
-            italic="the magic"
-            description="Certified, gentle and endlessly trained — our team treats every guest like a canvas."
+            overline="About the Parlour"
+            title="Beauty, care &"
+            italic="confidence"
+            description="From precision hair and radiant skin to everyday essentials and bridal makeup — every service is tailored to you, in a welcoming, hygienic space."
             align="center"
           />
           <div className="mt-16 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((m, i) => (
-              <Reveal key={m.name} delay={i}>
-                <article className="group" data-testid={`team-${m.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+            {serviceCategories.map((cat, i) => (
+              <Reveal key={cat.id} delay={i}>
+                <article className="group" data-testid={`parlour-${cat.id}`}>
                   <div className="overflow-hidden rounded-3xl">
                     <img
-                      src={m.img}
-                      alt={`${m.name}, ${m.role}`}
+                      src={parlourImages[cat.id]}
+                      alt={cat.title}
                       loading="lazy"
                       className="aspect-[3/4] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
-                  <h3 className="mt-5 font-display text-2xl font-light text-plum">{m.name}</h3>
-                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">{m.role}</p>
+                  <h3 className="mt-5 font-display text-2xl font-light text-plum">{cat.title}</h3>
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">{cat.items.length} services</p>
+                  <p className="mt-3 text-sm leading-relaxed text-mauve">{cat.blurb}</p>
                 </article>
               </Reveal>
             ))}

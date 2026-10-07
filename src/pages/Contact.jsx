@@ -19,7 +19,7 @@ const Field = ({ label, children, testId }) => (
 const Contact = () => {
   usePageMeta(
     "Book an Appointment",
-    "Reserve your ritual at Unique Beauty Parlour — call, WhatsApp or book online. Open Monday to Sunday on FC Road, Pune."
+    `Reserve your ritual at ${salon.name} — call, WhatsApp or book online. Open Monday to Sunday in Kamothe.`
   );
   const [form, setForm] = useState({ name: "", phone: "", service: "", date: "", time: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
@@ -69,7 +69,7 @@ const Contact = () => {
                   </span>
                   <span>
                     <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-gold">{c.title}</span>
-                    <span className="text-base leading-relaxed text-ink">{c.value}</span>
+                    <span className="whitespace-pre-line text-base leading-relaxed text-ink">{c.value}</span>
                   </span>
                 </a>
               </Reveal>
@@ -90,7 +90,7 @@ const Contact = () => {
           </div>
 
           <Reveal delay={1}>
-            <div className="relative overflow-hidden rounded-3xl border border-plum/10 bg-white p-8 shadow-luxe sm:p-12" data-testid="booking-form-card">
+            <div id="booking-form" className="relative overflow-hidden rounded-3xl border border-plum/10 bg-white p-8 shadow-luxe sm:p-12" data-testid="booking-form-card">
               <AnimatePresence mode="wait">
                 {submitted ? (
                   <motion.div
@@ -166,7 +166,7 @@ const Contact = () => {
                           </optgroup>
                           <optgroup label="Services">
                             {allServices.map((s) => (
-                              <option key={s.name} value={s.name}>{s.name} — from ₹{s.price.toLocaleString("en-IN")}</option>
+                              <option key={s.name} value={s.name}>{s.name}</option>
                             ))}
                           </optgroup>
                         </select>
@@ -204,20 +204,53 @@ const Contact = () => {
         </div>
       </section>
 
-      <section className="bg-champagne" data-testid="map-section">
+      <section className="bg-champagne" data-testid="visit-section">
         <div className="mx-auto max-w-7xl px-6 pb-24 sm:px-10">
           <Reveal>
-            <div className="relative overflow-hidden rounded-3xl border border-plum/10 shadow-luxe" data-testid="map-embed">
-              <iframe
-                title={`Map — ${salon.name}`}
-                src={`https://maps.google.com/maps?q=${encodeURIComponent(salon.mapQuery)}&z=14&output=embed`}
-                className="h-[26rem] w-full grayscale-[35%]"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-              <div className="absolute bottom-6 left-6 max-w-xs rounded-2xl bg-white/90 p-6 shadow-luxe-lg backdrop-blur-md">
-                <span className="mb-1 block text-xs font-semibold uppercase tracking-[0.2em] text-gold">Find Us</span>
-                <p className="text-sm leading-relaxed text-ink">{salon.address}</p>
+            <div className="grid gap-10 overflow-hidden rounded-3xl bg-plum p-8 shadow-luxe-lg sm:p-12 lg:grid-cols-2 lg:items-center lg:gap-16 lg:p-16" data-testid="visit-card">
+              <div className="flex flex-col gap-6">
+                <span className="text-xs font-medium uppercase tracking-[0.28em] text-gold">Find Us</span>
+                <h2 className="font-display text-4xl font-light tracking-tight text-cream sm:text-5xl">
+                  Visit our <em className="font-accent font-medium italic text-gold">parlour</em>
+                </h2>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cream/70">{salon.name}</p>
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cream/10 text-gold">
+                    <MapPin className="h-5 w-5" />
+                  </span>
+                  <p className="whitespace-pre-line text-base leading-relaxed text-cream/85" data-testid="visit-address">{salon.address}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cream/10 text-gold">
+                    <Phone className="h-5 w-5" />
+                  </span>
+                  <p className="text-base text-cream/85" data-testid="visit-phone">{salon.phone}</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <a
+                  href={salon.phoneHref}
+                  data-testid="visit-call"
+                  className="inline-flex items-center justify-center gap-3 rounded-full bg-cream px-8 py-4 text-sm font-semibold tracking-wide text-plum transition-colors duration-300 hover:bg-gold hover:text-white"
+                >
+                  <Phone className="h-4 w-4" /> Call Us
+                </a>
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-testid="visit-whatsapp"
+                  className="inline-flex items-center justify-center gap-3 rounded-full bg-[#25D366] px-8 py-4 text-sm font-semibold tracking-wide text-white transition-colors duration-300 hover:bg-[#1eb856]"
+                >
+                  <MessageCircle className="h-4 w-4" /> WhatsApp Us
+                </a>
+                <a
+                  href="#booking-form"
+                  data-testid="visit-book"
+                  className="inline-flex items-center justify-center gap-3 rounded-full border border-cream/30 px-8 py-4 text-sm font-semibold tracking-wide text-cream transition-colors duration-300 hover:border-gold hover:text-gold"
+                >
+                  <Clock className="h-4 w-4" /> Book Appointment
+                </a>
               </div>
             </div>
           </Reveal>

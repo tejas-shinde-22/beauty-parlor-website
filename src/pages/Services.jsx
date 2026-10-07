@@ -46,7 +46,7 @@ const Services = () => {
             </Reveal>
             <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
               {cat.items.map((s, i) => (
-                <ServiceCard key={s.name} service={s} index={i} />
+                <ServiceCard key={s.name} service={s} index={i} hidePrice={true} />
               ))}
             </div>
           </div>

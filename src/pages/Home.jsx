@@ -170,10 +170,10 @@ const Experience = () => {
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 sm:px-10 lg:grid-cols-2 lg:py-32">
         <div className="relative h-[30rem] sm:h-[36rem]">
           <motion.div style={{ y: yA }} className="absolute left-0 top-0 w-[72%] overflow-hidden rounded-3xl shadow-luxe-lg">
-            <img src={images.interiors[0]} alt="Inside the Unique Beauty Parlour styling floor" loading="lazy" className="aspect-[3/4] w-full object-cover" />
+            <img src={images.interiors[0]} alt={`Inside the ${salon.name} styling floor`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
           </motion.div>
           <motion.div style={{ y: yB }} className="absolute bottom-0 right-0 w-[52%] overflow-hidden rounded-3xl border-8 border-champagne shadow-luxe-lg">
-            <img src={images.skin.spa} alt="Spa ritual at Unique Beauty Parlour" loading="lazy" className="aspect-square w-full object-cover" />
+            <img src={images.skin.spa} alt={`Spa ritual at ${salon.name}`} loading="lazy" className="aspect-square w-full object-cover" />
           </motion.div>
         </div>
         <div className="flex flex-col items-start gap-7">
@@ -275,7 +275,7 @@ const InstaGallery = () => (
 const Home = () => {
   usePageMeta(
     "Luxury Salon & Bridal Studio",
-    "Unique Beauty Parlour — couture hair, premium facials, bridal makeup and signature beauty packages from ₹699. Book your appointment."
+    `${salon.name} — couture hair, premium facials, bridal makeup and signature beauty packages from ₹699. Book your appointment.`
   );
   const featured = [
     serviceCategories[0].items[0],
@@ -310,7 +310,7 @@ const Home = () => {
           </div>
           <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
             {featured.map((s, i) => (
-              <ServiceCard key={s.name} service={s} index={i} />
+              <ServiceCard key={s.name} service={s} index={i} hidePrice={true} />
             ))}
           </div>
         </div>
