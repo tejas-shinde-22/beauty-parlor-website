@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Phone, MessageCircle, MapPin, Clock, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Phone, MessageCircle, MapPin, Clock } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import Reveal from "@/components/shared/Reveal";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -22,13 +22,29 @@ const Contact = () => {
     `Reserve your ritual at ${salon.name} — call, WhatsApp or book online. Open Monday to Sunday in Kamothe.`
   );
   const [form, setForm] = useState({ name: "", phone: "", service: "", date: "", time: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  // Required-field validation is handled by the form's native `required`/`pattern`
+  // attributes, so this only runs once the form is valid.
   const onSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    const [y, m, d] = form.date.split("-");
+    const lines = [
+      `Hello ${salon.name},`,
+      "",
+      "I would like to book an appointment.",
+      "",
+      `Name: ${form.name.trim()}`,
+      `Phone: ${form.phone.trim()}`,
+      `Service: ${form.service}`,
+      `Date: ${d}-${m}-${y}`,
+      `Time: ${form.time}`,
+    ];
+    if (form.message.trim()) lines.push(`Message: ${form.message.trim()}`);
+    lines.push("", "Please confirm my appointment.");
+    const url = `https://wa.me/${salon.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const infoCards = [
@@ -91,114 +107,65 @@ const Contact = () => {
 
           <Reveal delay={1}>
             <div id="booking-form" className="relative overflow-hidden rounded-3xl border border-plum/10 bg-white p-8 shadow-luxe sm:p-12" data-testid="booking-form-card">
-              <AnimatePresence mode="wait">
-                {submitted ? (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex min-h-[28rem] flex-col items-center justify-center gap-6 text-center"
-                    data-testid="booking-success"
-                  >
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 14 }}
-                      className="flex h-20 w-20 items-center justify-center rounded-full bg-gold/15 text-gold"
-                    >
-                      <CheckCircle2 className="h-10 w-10" />
-                    </motion.span>
-                    <h3 className="font-display text-4xl font-light text-plum">
-                      Request received, <em className="font-accent italic text-burgundy">{form.name.split(" ")[0] || "gorgeous"}</em>
-                    </h3>
-                    <p className="max-w-md text-base leading-relaxed text-mauve">
-                      Your {form.service || "appointment"} request for {form.date || "your chosen date"} at {form.time || "your chosen time"} is with our front desk.
-                      We will confirm on <strong className="text-plum">{form.phone}</strong> within 30 minutes during working hours.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                      <a
-                        href={waLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        data-testid="success-whatsapp"
-                        className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-7 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-[#1eb856]"
-                      >
-                        <MessageCircle className="h-4 w-4" /> Confirm faster on WhatsApp
-                      </a>
-                      <button
-                        onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", service: "", date: "", time: "", message: "" }); }}
-                        data-testid="book-another"
-                        className="rounded-full border border-plum/20 px-7 py-3 text-sm font-semibold text-plum transition-colors duration-300 hover:border-gold"
-                      >
-                        Book Another
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.form
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    onSubmit={onSubmit}
-                    className="flex flex-col gap-8"
-                    data-testid="booking-form"
-                  >
-                    <div>
-                      <span className="mb-2 block text-xs font-medium uppercase tracking-[0.28em] text-gold">Appointment</span>
-                      <h3 className="font-display text-3xl font-light text-plum sm:text-4xl">Reserve your ritual</h3>
-                    </div>
-                    <div className="grid gap-8 sm:grid-cols-2">
-                      <Field label="Full Name" testId="field-name">
-                        <input required type="text" value={form.name} onChange={set("name")} placeholder="Aarohi Desai" className={inputCls} data-testid="input-name" />
-                      </Field>
-                      <Field label="Phone Number" testId="field-phone">
-                        <input required type="tel" pattern="[0-9+ -]{10,}" value={form.phone} onChange={set("phone")} placeholder="+91 98XXX XXXXX" className={inputCls} data-testid="input-phone" />
-                      </Field>
-                      <Field label="Service" testId="field-service">
-                        <select required value={form.service} onChange={set("service")} className={`${inputCls} cursor-pointer`} data-testid="input-service">
-                          <option value="" disabled>Select a service or package</option>
-                          <optgroup label="Packages">
-                            {packages.map((p) => (
-                              <option key={p.id} value={p.name}>{p.name} — ₹{p.price.toLocaleString("en-IN")}</option>
-                            ))}
-                          </optgroup>
-                          <optgroup label="Services">
-                            {allServices.map((s) => (
-                              <option key={s.name} value={s.name}>{s.name}</option>
-                            ))}
-                          </optgroup>
-                        </select>
-                      </Field>
-                      <Field label="Preferred Date" testId="field-date">
-                        <input required type="date" value={form.date} onChange={set("date")} min={new Date().toISOString().split("T")[0]} className={`${inputCls} cursor-pointer`} data-testid="input-date" />
-                      </Field>
-                      <Field label="Preferred Time" testId="field-time">
-                        <select required value={form.time} onChange={set("time")} className={`${inputCls} cursor-pointer`} data-testid="input-time">
-                          <option value="" disabled>Pick a time slot</option>
-                          {timeSlots.map((t) => (
-                            <option key={t} value={t}>{t}</option>
-                          ))}
-                        </select>
-                      </Field>
-                    </div>
-                    <Field label="Message (optional)" testId="field-message">
-                      <textarea rows={3} value={form.message} onChange={set("message")} placeholder="Anything we should know — occasion, allergies, preferred artist…" className={`${inputCls} resize-none`} data-testid="input-message" />
-                    </Field>
-                    <button
-                      type="submit"
-                      data-testid="booking-submit"
-                      className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-plum py-4 text-sm font-semibold tracking-wide text-cream transition-colors duration-300 hover:bg-burgundy sm:w-auto sm:px-12"
-                    >
-                      Request Appointment
-                    </button>
-                    <p className="text-xs leading-relaxed text-mauve/70">
-                      This is a demo template — requests are not sent to a server. A live version confirms instantly via SMS & WhatsApp.
-                    </p>
-                  </motion.form>
-                )}
-              </AnimatePresence>
+            <motion.form
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onSubmit={onSubmit}
+              className="flex flex-col gap-8"
+              data-testid="booking-form"
+            >
+              <div>
+                <span className="mb-2 block text-xs font-medium uppercase tracking-[0.28em] text-gold">Appointment</span>
+                <h3 className="font-display text-3xl font-light text-plum sm:text-4xl">Reserve your ritual</h3>
+              </div>
+              <div className="grid gap-8 sm:grid-cols-2">
+                <Field label="Full Name" testId="field-name">
+                  <input required type="text" value={form.name} onChange={set("name")} placeholder="Aarohi Desai" className={inputCls} data-testid="input-name" />
+                </Field>
+                <Field label="Phone Number" testId="field-phone">
+                  <input required type="tel" pattern="[0-9+ -]{10,}" value={form.phone} onChange={set("phone")} placeholder="+91 98XXX XXXXX" className={inputCls} data-testid="input-phone" />
+                </Field>
+                <Field label="Service" testId="field-service">
+                  <select required value={form.service} onChange={set("service")} className={`${inputCls} cursor-pointer`} data-testid="input-service">
+                    <option value="" disabled>Select a service or package</option>
+                    <optgroup label="Packages">
+                      {packages.map((p) => (
+                        <option key={p.id} value={p.name}>{p.name} — ₹{p.price.toLocaleString("en-IN")}</option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Services">
+                      {allServices.map((s) => (
+                        <option key={s.name} value={s.name}>{s.name}</option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </Field>
+                <Field label="Preferred Date" testId="field-date">
+                  <input required type="date" value={form.date} onChange={set("date")} min={new Date().toISOString().split("T")[0]} className={`${inputCls} cursor-pointer`} data-testid="input-date" />
+                </Field>
+                <Field label="Preferred Time" testId="field-time">
+                  <select required value={form.time} onChange={set("time")} className={`${inputCls} cursor-pointer`} data-testid="input-time">
+                    <option value="" disabled>Pick a time slot</option>
+                    {timeSlots.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
+              <Field label="Message (optional)" testId="field-message">
+                <textarea rows={3} value={form.message} onChange={set("message")} placeholder="Anything we should know — occasion, allergies, preferred artist…" className={`${inputCls} resize-none`} data-testid="input-message" />
+              </Field>
+              <button
+                type="submit"
+                data-testid="booking-submit"
+                className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-plum py-4 text-sm font-semibold tracking-wide text-cream transition-colors duration-300 hover:bg-burgundy sm:w-auto sm:px-12"
+              >
+                Request Appointment
+              </button>
+              <p className="text-xs leading-relaxed text-mauve/70">
+                Your request opens in WhatsApp so our front desk can confirm your appointment.
+              </p>
+            </motion.form>
             </div>
           </Reveal>
         </div>
